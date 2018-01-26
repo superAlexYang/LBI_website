@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{% block title %}Flask Basics{% endblock %}</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+        <link rel="stylesheet" href="/static/css/main.css">
+
+    </head>
+    <body>
+        <div class="col-md-5 img-block" style="height:100vh">
+          <h3 id="image-title">{{imageDict['image_name']}}</h3>
+          <img class=".center-block label-image" src="../static/Pics/{{imageDict['image_name']}}" />
+        </div>
+        <div class="col-md-7 label-block" style="height:100vh">
+          <form action="{{ url_for('save_Group_1') }}" method="POST">
+            <input type = "hidden" name = "image_name" value = "{{imageDict['image_name']}}" />
+            <div class="btn-group" role="group" aria-label="...">
+              {% for category, choices in options.items() %}
+              <div class="label-group" id="{{category}}">
+                <h4><label class="label label-primary">{{category}}</label></h4>
+                <p class="label-row">
+                {% for choice in choices %}
+                  {% if 'color' in category %}
+                    {% if category|string+"-"+choice|string in imageDict%}
+                      {% if imageDict[category|string+"-"+choice|string] == '1' %}
+                        <span class="choice-selector">
+                          <input type="checkbox" id="{{category}}-{{choice}}" name="{{category}}-{{choice}}" value="1" style="background-color:{{choice}}" checked>
+                          <label for="{{category}}-{{choice}}" style="background-color:{{choice}}">{{choice}}</label>
+                        </span>
+                      {% else %}
+                        <span class="choice-selector">
+                          <input type="checkbox" id="{{category}}-{{choice}}" name="{{category}}-{{choice}}" value="1" style="background-color:{{choice}}">
+                          <label for="{{category}}-{{choice}}" style="background-color:{{choice}}">{{choice}}</label>
+                        </span>
+                      {% endif %}
+                    {% else %}
+                    <span class="choice-selector">
+                      <input type="checkbox" id="{{category}}-{{choice}}" name="{{category}}-{{choice}}" value="1" style="background-color:{{choice}}">
+                      <label for="{{category}}-{{choice}}" style="background-color:{{choice}}">{{choice}}</label>
+                    </span>
+                    {% endif %}
+                  {% else %}
+                    {% if category|string+"-"+choice|string in imageDict %}
+                      {% if imageDict[category|string+"-"+choice|string] == '1' %}
+                        <span class="choice-selector">
+                          <input type="checkbox" id="{{category}}-{{choice}}" name="{{category}}-{{choice}}" value="1" checked>
+                          <label for="{{category}}-{{choice}}" style="background-color:{{choice}}">{{choice}}</label>
+                        </span>
+                      {% else %}
+                        <span class="choice-selector">
+                          <input type="checkbox" id="{{category}}-{{choice}}" name="{{category}}-{{choice}}" value="1">
+                          <label for="{{category}}-{{choice}}" style="background-color:{{choice}}">{{choice}}</label>
+                        </span>
+                      {% endif %}
+                    {% else %}
+                    <span class="choice-selector">
+                      <input type="checkbox" id="{{category}}-{{choice}}" name="{{category}}-{{choice}}" value="1">
+                      <label for="{{category}}-{{choice}}" style="background-color:{{choice}}">{{choice}}</label>
+                    </span>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </p>
+            </div>
+              {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-success btn-lg btn-block">Done</button>
+          </form>
+        </div>
+    </body>
+</html>
